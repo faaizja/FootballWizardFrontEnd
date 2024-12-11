@@ -34,7 +34,7 @@ export const SideNav = ({ isOpen, setIsOpen }) => {
         <div className="absolute bottom-0 left-0 right-0 p-4">
           <button className="w-full urbanist-regular px-4 py-2 text-sm sm:text-base bg-fuchsia-900 rounded-md text-white text-left flex flex-row gap-2 items-center">
             <img src={logo} className="w-5 h-5 rounded-full overflow-hidden" alt="User" />{" "}
-            Faaiz
+            Faaiz/Harjot
           </button>
         </div>
       </div>
