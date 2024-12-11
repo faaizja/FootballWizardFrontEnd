@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { UserMessage } from "../components/UserMessage";
 import { ResponseMessage } from "../components/ResponseMessage";
@@ -10,13 +10,24 @@ export const Home = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isSideNavOpen, setIsSideNavOpen] = useState(false);
+
+  useEffect(() => {
+    // Add initial welcome message
+    setMessages([
+      {
+        text: "Welcome to Football Wizard! I can give you statistics on the Premier League. Ask away!",
+        user: false,
+      },
+    ]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
     const userMessage = { text: input, user: true };
-    setMessages([...messages, userMessage]);
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
     setError("");
     setIsLoading(true);
     setIsAnimating(true);
@@ -36,33 +47,45 @@ export const Home = () => {
       );
     } finally {
       setIsLoading(false);
-      setTimeout(() => setIsAnimating(false), 1000); // Reset animation after 1 second
+      setTimeout(() => setIsAnimating(false), 1000);
     }
   };
 
+  const toggleSideNav = () => {
+    setIsSideNavOpen(!isSideNavOpen);
+  };
+
   return (
-    <div className="p-4">
-      <div className="flex flex-row">
-        <SideNav />
-        <div className="w-5/6 h-screen fixed top-0 right-0 flex flex-col">
-          <div className="rounded-lg w-full p-4 flex-grow h-auto overflow-y-auto mb-4 flex flex-col gap-3">
-            {messages.map((message, index) => (
-              <div key={index}>
-                {message.user ? (
-                  <UserMessage message={message.text} />
-                ) : (
-                  <ResponseMessage message={message.text} />
-                )}
-              </div>
-            ))}
-            {isLoading && (
-              <div className="italic text-gray-500 flex flex-row items-center gap-2">
-                <span className="loader"></span> Thinking...
-              </div>
-            )}
-          </div>
-          {error && <div className="text-red-500 mb-4">{error}</div>}
-          <form onSubmit={handleSubmit} className="flex mb-5 mr-4 ml-4">
+    <div className="flex flex-col sm:flex-row h-screen">
+      <SideNav isOpen={isSideNavOpen} setIsOpen={setIsSideNavOpen} />
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        <div className="bg-fuchsia-900 p-2 sm:hidden">
+          <button
+            onClick={toggleSideNav}
+            className="text-white"
+          >
+            ☰
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-4">
+          {messages.map((message, index) => (
+            <div key={index} className="mb-4 animate-fade-in">
+              {message.user ? (
+                <UserMessage message={message.text} />
+              ) : (
+                <ResponseMessage message={message.text} />
+              )}
+            </div>
+          ))}
+          {isLoading && (
+            <div className="italic text-gray-500 flex flex-row items-center gap-2">
+              <span className="loader"></span> Thinking...
+            </div>
+          )}
+        </div>
+        {error && <div className="text-red-500 p-4">{error}</div>}
+        <form onSubmit={handleSubmit} className="p-4 border-t">
+          <div className="flex">
             <input
               type="text"
               value={input}
@@ -85,8 +108,8 @@ export const Home = () => {
                 </>
               )}
             </button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   );
