@@ -7,14 +7,14 @@ export const SideNav = () => {
         Football Wizard
       </h1>
       <div className="w-full h-full flex gap-4 flex-col justify-between items-center py-5">
-        <div className="flex flex-col gap-3">
-          <button className="w-min-full urbanist-regular px-4 py-2 text-base bg-fuchsia-900 rounded-md text-white text-left">
+        <div className="flex flex-col gap-3 w-full items-start">
+          <button className="w-full urbanist-regular px-4 py-2 text-base bg-fuchsia-900 rounded-md text-white text-left">
             Chats
           </button>
           <a
             href="https://www.premierleague.com/"
             target="_blank"
-            className="w-min-full urbanist-regular px-4 py-2 text-base bg-fuchsia-900 bg-opacity-30 hover:bg-opacity-100 transition duration-500 ease-in-out rounded-md text-white text-left"
+            className="w-full urbanist-regular px-4 py-2 text-base bg-fuchsia-900 bg-opacity-30 hover:bg-opacity-100 transition duration-500 ease-in-out rounded-md text-white text-left"
           >
             Premier Leauge Website
           </a>
