@@ -43,9 +43,23 @@
     0%, 100% {
       transform: scale(0);
       opacity: 1;
-}
+    }
     50% {
       transform: scale(1);
       opacity: 0;
+    }
+}
+
+@keyframes goal {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateX(100px) rotate(360deg);
+  }
+}
+
+.animate-goal {
+  animation: goal 1s ease-out;
 }
 

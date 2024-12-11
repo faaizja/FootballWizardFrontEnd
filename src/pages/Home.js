@@ -8,7 +8,8 @@ export const Home = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,10 +18,11 @@ export const Home = () => {
     const userMessage = { text: input, user: true };
     setMessages([...messages, userMessage]);
     setError("");
-    setIsLoading(true); // Set loading state to true
+    setIsLoading(true);
+    setIsAnimating(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/chat", {
+      const response = await axios.post("https://footballwizardbackend.onrender.com/api/chat", {
         message: input,
       });
       console.log("Backend response:", response.data);
@@ -33,7 +35,8 @@ export const Home = () => {
         "An error occurred while fetching the response. Please try again."
       );
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
+      setTimeout(() => setIsAnimating(false), 1000); // Reset animation after 1 second
     }
   };
 
@@ -54,7 +57,7 @@ export const Home = () => {
             ))}
             {isLoading && (
               <div className="italic text-gray-500 flex flex-row items-center gap-2">
-                <span class="loader"></span> Thinking...
+                <span className="loader"></span> Thinking...
               </div>
             )}
           </div>
@@ -66,14 +69,21 @@ export const Home = () => {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask Football Wizard..."
               className="flex-grow p-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-300"
-              disabled={isLoading} // Disable input while loading
+              disabled={isLoading}
             />
             <button
               type="submit"
-              className="bg-fuchsia-900 transition duration-500 ease-in-out text-white p-2 rounded-r-lg hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-300"
-              disabled={isLoading} // Disable button while loading
+              className="bg-fuchsia-900 transition duration-500 ease-in-out text-white p-2 rounded-r-lg hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-300 flex items-center justify-center"
+              disabled={isLoading}
             >
-              {isLoading ? "Sending..." : "Send"} {/* Update button text */}
+              {isLoading ? (
+                "Sending..."
+              ) : (
+                <>
+                  Send
+                  <span className={`ml-2 ${isAnimating ? 'animate-goal' : ''}`}>⚽</span>
+                </>
+              )}
             </button>
           </form>
         </div>
@@ -81,3 +91,4 @@ export const Home = () => {
     </div>
   );
 };
+
