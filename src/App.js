@@ -41,10 +41,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white text-fuchsia-950 font-sans">
-      <nav className="bg-fuchsia-950 text-white p-4">
+
+      <nav className="bg-fuchsia-950 lg:mt-2  text-white p-4">
         <div className="container mx-auto flex items-center">
-          <img src="/pl-logo.png" alt="Premier League Logo" className="h-12 mr-4 hover:scale-110 duration-300" />
-          <h1 className="text-2xl font-bold">Football Wizard</h1>
+          <img src="/pl-logo.png" alt="Premier League Logo" className="h-12 mr-4 hover:scale-110 duration-500" />
+          <h1 className="text-4xl font-bold">Football Wizard</h1>
         </div>
       </nav>
 
@@ -87,7 +88,7 @@ function App() {
             }`}
             disabled={isSending}
           >
-            {isSending ? '⚽' : 'Send'}
+            {isSending ? '⚽' : '⚽'}
           </button>
         </form>
       </div>
