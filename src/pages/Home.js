@@ -8,6 +8,7 @@ export const Home = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,6 +17,7 @@ export const Home = () => {
     const userMessage = { text: input, user: true };
     setMessages([...messages, userMessage]);
     setError("");
+    setIsLoading(true); // Set loading state to true
 
     try {
       const response = await axios.post("http://127.0.0.1:5000/api/chat", {
@@ -24,14 +26,15 @@ export const Home = () => {
       console.log("Backend response:", response.data);
       const botMessage = { text: response.data.response, user: false };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
+      setInput("");
     } catch (error) {
       console.error("Error:", error);
       setError(
         "An error occurred while fetching the response. Please try again."
       );
+    } finally {
+      setIsLoading(false); // Reset loading state
     }
-
-    setInput("");
   };
 
   return (
@@ -49,6 +52,11 @@ export const Home = () => {
                 )}
               </div>
             ))}
+            {isLoading && (
+              <div className="italic text-gray-500 flex flex-row items-center gap-2">
+                <span class="loader"></span> Thinking...
+              </div>
+            )}
           </div>
           {error && <div className="text-red-500 mb-4">{error}</div>}
           <form onSubmit={handleSubmit} className="flex mb-5 mr-4 ml-4">
@@ -58,12 +66,14 @@ export const Home = () => {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask Football Wizard..."
               className="flex-grow p-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-300"
+              disabled={isLoading} // Disable input while loading
             />
             <button
               type="submit"
               className="bg-fuchsia-900 transition duration-500 ease-in-out text-white p-2 rounded-r-lg hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-300"
+              disabled={isLoading} // Disable button while loading
             >
-              Send
+              {isLoading ? "Sending..." : "Send"} {/* Update button text */}
             </button>
           </form>
         </div>
