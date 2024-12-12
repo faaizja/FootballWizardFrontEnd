@@ -85,3 +85,30 @@
   animation: fadeIn 0.5s ease-out forwards;
 }
 
+
+
+@keyframes spinBall {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shootBall {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateX(100px) rotate(360deg);
+  }
+}
+
+.animate-spin-ball {
+  animation: spinBall 0.5s linear infinite;
+}
+
+.animate-shoot-ball {
+  animation: shootBall 1s ease-out forwards;
+}

@@ -11,6 +11,9 @@ export const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
+  const [isHoveringBall, setIsHoveringBall] = useState(false);
+  const [isClickedBall, setIsClickedBall] = useState(false);
+
 
   useEffect(() => {
     // Add initial welcome message
@@ -33,6 +36,7 @@ export const Home = () => {
     setIsAnimating(true);
 
     // http://127.0.0.1:5000/api/chat
+    // https://footballwizardbackend.onrender.com/api/chat
     try {
       const response = await axios.post("https://footballwizardbackend.onrender.com/api/chat", {
         message: input,
@@ -59,6 +63,7 @@ export const Home = () => {
   return (
     <div className="flex flex-col sm:flex-row h-screen">
       <SideNav isOpen={isSideNavOpen} setIsOpen={setIsSideNavOpen} />
+
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         <div className="bg-fuchsia-900 p-2 sm:hidden">
           <button
@@ -68,6 +73,7 @@ export const Home = () => {
             ☰
           </button>
         </div>
+
         <div className="flex-1 overflow-y-auto p-4">
           {messages.map((message, index) => (
             <div key={index} className="mb-4 animate-fade-in">
@@ -84,8 +90,11 @@ export const Home = () => {
             </div>
           )}
         </div>
+
         {error && <div className="text-red-500 p-4">{error}</div>}
+
         <form onSubmit={handleSubmit} className="p-4 border-t">
+
           <div className="flex">
             <input
               type="text"
@@ -95,23 +104,44 @@ export const Home = () => {
               className="flex-grow p-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-300"
               disabled={isLoading}
             />
-            <button
-              type="submit"
-              className="bg-fuchsia-900 transition duration-500 ease-in-out text-white p-2 rounded-r-lg hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-300 flex items-center justify-center"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                "Sending..."
-              ) : (
-                <>
-                  Send
-                  <span className={`ml-2 ${isAnimating ? 'animate-goal' : ''}`}>⚽</span>
-                </>
-              )}
-            </button>
+
+          <button
+            type="submit"
+            className="bg-fuchsia-900 transition duration-500 ease-in-out text-white p-2 rounded-r-lg hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-300 flex items-center justify-center"
+            disabled={isLoading}
+            onMouseEnter={() => setIsHoveringBall(true)}
+            onMouseLeave={() => setIsHoveringBall(false)}
+            onClick={() => {
+              setIsClickedBall(true);
+              setTimeout(() => setIsClickedBall(false), 1000); // Reset animation
+            }}
+          >
+            {isLoading ? (
+              "Sending..."
+            ) : (
+              <>
+                Send
+                <span
+                  className={`ml-2 ${
+                    isHoveringBall && !isClickedBall
+                      ? "animate-spin-ball"
+                      : isClickedBall
+                      ? "animate-shoot-ball"
+                      : ""
+                  }`}
+                >
+                  ⚽
+                </span>
+              </>
+            )}
+          </button>
+
+
           </div>
+
         </form>
       </div>
+
     </div>
   );
 };
