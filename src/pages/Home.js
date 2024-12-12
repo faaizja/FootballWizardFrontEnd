@@ -32,8 +32,9 @@ export const Home = () => {
     setIsLoading(true);
     setIsAnimating(true);
 
+    // http://127.0.0.1:5000/api/chat
     try {
-      const response = await axios.post("https://footballwizardbackend.onrender.com/api/chat", {
+      const response = await axios.post("http://127.0.0.1:5000/api/chat", {
         message: input,
       });
       console.log("Backend response:", response.data);
